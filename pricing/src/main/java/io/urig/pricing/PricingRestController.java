@@ -2,7 +2,10 @@ package io.urig.pricing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class PricingRestController {
 
 	@GetMapping("/customer/{customerId}")
-	public List<BookPrice> GetBookPricesForCustomer(@PathVariable Long customerId, @RequestParam Long[] bookIds) {
+	public BookPrice[] GetBookPricesForCustomer(@PathVariable Long customerId, @RequestParam Long[] bookIds) {
 		if (customerId == null) throw new IllegalArgumentException("customerId cannot be null");
 		if (bookIds == null) throw new IllegalArgumentException("bookIds cannot be null");
 		
-		List<BookPrice> bookPrices = new ArrayList<BookPrice>();
-		for (long bookId : bookIds) {
-			bookPrices.add(new BookPrice(bookId, new BigDecimal(customerId*2)));
-		}
+		BookPrice[] bookPrices = Arrays.stream(bookIds)
+			.map(bookId -> new BookPrice(bookId, new BigDecimal(customerId*2)))
+			.toArray(BookPrice[]::new);
+		
 		return bookPrices;
 	}
 }
