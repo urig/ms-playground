@@ -1,9 +1,14 @@
 package io.urig.inventory;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +43,23 @@ public class InventoryRestControllerTests {
 	        .andExpect(jsonPath("$[0].id", is(1)))
             .andExpect(jsonPath("$[0].title", is("Moby Dick")))
             .andExpect(jsonPath("$[0].author", is("Herman Melville")));	
+    }
+    
+    
+    @Test 
+    public void getBooks_getBooks_returnsMobyDick2() throws Exception {
+    	// Arrange
+    	Long bookId = 1L;
+    	Book book = new Book();
+    	BookRepository bookRepository = mock(BookRepository.class);
+    	when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+    	InventoryRestController target = new InventoryRestController(bookRepository);
+    	
+    	// Act
+    	Book actual = target.getBookById(bookId);
+    	
+    	// Assert
+		assertThat(actual).isEqualTo(book);
     }
 
 }
