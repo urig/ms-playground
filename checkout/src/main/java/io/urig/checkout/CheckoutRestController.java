@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import feign.Feign;
+
 @RestController
 @RequestMapping("/checkout/{customerId}")
 public class CheckoutRestController {
@@ -19,6 +21,7 @@ public class CheckoutRestController {
 	@GetMapping("")
 	public void customerBuysBook(@PathVariable Long customerId, @RequestParam Long bookId) {
 		Book book = inventoryClient.getBookById(1L).get();
+
 		Book book2 = book;
 	}
 }

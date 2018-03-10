@@ -25,9 +25,7 @@ public class InventoryRestController {
 	}
 
 	@GetMapping()
-	public List<Book> GetBooks() {
-		int customerId = 1;
-
+	public List<Book> getBooks() {
 		List<Book> books = bookRepository.findAll();
 
 //		String bookIds = books.stream().map(Book::getId).map(id -> id.toString()).collect(Collectors.joining(","));
@@ -39,8 +37,8 @@ public class InventoryRestController {
 	}
 	
 	@GetMapping(path="/{bookId}")
-	public Optional<Book> getBookById(@PathVariable Long bookId) {
-		return bookRepository.findById(bookId);
+	public Book getBookById(@PathVariable Long bookId) {
+		return bookRepository.findById(bookId).get();
 	}
 
 }
